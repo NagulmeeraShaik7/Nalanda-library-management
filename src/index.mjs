@@ -10,6 +10,9 @@ import dotenv from "dotenv";
 import authRoutes from "./apps/auth/routers/auth.route.mjs";
 import bookRoutes from "./apps/books/routers/book.route.mjs";
 import borrowingRoutes from "./apps/borrows/routers/borrow.route.mjs";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./infrastructures/config/swagger.config.mjs";
+import cors from "cors";
 import { errorHandler } from "./apps/middlewares/error.middleware.mjs";
 
 /**
@@ -33,6 +36,22 @@ app.use(express.json());
  * Connects to MongoDB using the URI from environment variables.
  * @returns {Promise<void>} Resolves when the connection is successful, logs errors otherwise.
  */
+
+
+/**
+ * Middleware to enable CORS for all routes.
+ */
+app.use(cors());
+
+
+/**
+ * Swagger UI route.
+ */
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true

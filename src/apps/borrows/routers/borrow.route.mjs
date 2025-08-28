@@ -20,7 +20,7 @@ const borrowController = new BorrowController(borrowUseCase);
 
 /**
  * @swagger
- * /borrows/borrow:
+ * /api/borrows/borrow:
  *   post:
  *     summary: Borrow a book
  *     tags: [Borrows]
@@ -103,7 +103,7 @@ router.post("/borrow", authenticate, authorize(["Member", "Admin"]), borrowContr
 
 /**
  * @swagger
- * /borrows/{borrowId}/return:
+ * /api/borrows/{borrowId}/return:
  *   put:
  *     summary: Return a borrowed book
  *     tags: [Borrows]
@@ -176,7 +176,7 @@ router.put("/:borrowId/return", authenticate, authorize(["Member", "Admin"]), bo
 
 /**
  * @swagger
- * /borrows:
+ * /api/borrows:
  *   get:
  *     summary: List borrow records
  *     tags: [Borrows]
@@ -267,7 +267,7 @@ router.get("/", authenticate, authorize(["Admin", "Member"]), borrowController.l
 
 /**
  * @swagger
- * /borrows/reports/most-borrowed:
+ * /api/borrows/reports/most-borrowed:
  *   get:
  *     summary: Get the most borrowed books
  *     tags: [Borrows]
@@ -317,7 +317,7 @@ router.get("/reports/most-borrowed", authenticate, authorize(["Admin"]), borrowC
 
 /**
  * @swagger
- * /borrows/reports/active-members:
+ * /api/borrows/reports/active-members:
  *   get:
  *     summary: Get the most active members
  *     tags: [Borrows]
@@ -365,7 +365,7 @@ router.get("/reports/active-members", authenticate, authorize(["Admin"]), borrow
 
 /**
  * @swagger
- * /borrows/reports/availability:
+ * /api/borrows/reports/availability:
  *   get:
  *     summary: Get book availability summary
  *     tags: [Borrows]

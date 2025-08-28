@@ -19,7 +19,7 @@ const authController = new AuthController(authUseCase);
 
 /**
  * @swagger
- * /register:
+ * /api/auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Authentication]
@@ -35,8 +35,6 @@ const authController = new AuthController(authUseCase);
  *               - password
  *             properties:
  *               name:
- * permissions:
- *   - register
  *                 type: string
  *                 description: The user's full name
  *               email:
@@ -55,21 +53,7 @@ const authController = new AuthController(authUseCase);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: object
- *                   properties:
- *                     _id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     email:
- *                       type: string
- *                     role:
- *                       type: string
+ *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Bad request (e.g., invalid input or email already exists)
  *       500:
@@ -79,7 +63,7 @@ router.post("/register", authController.register);
 
 /**
  * @swagger
- * /login:
+ * /api/auth/login:
  *   post:
  *     summary: Log in a user
  *     tags: [Authentication]

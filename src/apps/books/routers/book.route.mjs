@@ -20,7 +20,7 @@ const bookController = new BookController(bookUseCase);
 
 /**
  * @swagger
- * /books:
+ * /api/books/:
  *   post:
  *     summary: Add a new book
  *     tags: [Books]
@@ -101,7 +101,7 @@ router.post("/", authenticate, authorize(["Admin"]), bookController.addBook);
 
 /**
  * @swagger
- * /books/{id}:
+ * /api/books/{id}:
  *   put:
  *     summary: Update an existing book
  *     tags: [Books]
@@ -184,7 +184,7 @@ router.put("/:id", authenticate, authorize(["Admin"]), bookController.updateBook
 
 /**
  * @swagger
- * /books/{id}:
+ * /api/books/{id}:
  *   delete:
  *     summary: Delete a book
  *     tags: [Books]
@@ -223,7 +223,7 @@ router.delete("/:id", authenticate, authorize(["Admin"]), bookController.deleteB
 
 /**
  * @swagger
- * /books:
+ * /api/books:
  *   get:
  *     summary: List books with optional filters and pagination
  *     tags: [Books]
