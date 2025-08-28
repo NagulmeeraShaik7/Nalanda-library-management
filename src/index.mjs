@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 
 import authRoutes from "./apps/auth/routers/auth.route.mjs";
 import bookRoutes from "./apps/books/routers/book.route.mjs";
+import borrowingRoutes from "./apps/borrows/routers/borrow.route.mjs"; 
 import { errorHandler } from "./apps/middlewares/error.middleware.mjs";
 
 dotenv.config();
@@ -15,15 +16,17 @@ app.use(express.json());
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error(err));
+})
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/books", bookRoutes);
+app.use("/api/borrows", borrowingRoutes); 
 
 // Error Middleware
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
