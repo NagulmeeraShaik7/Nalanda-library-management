@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 import authRoutes from "./apps/auth/routers/auth.route.mjs";
+import bookRoutes from "./apps/books/routers/book.route.mjs";
 import { errorHandler } from "./apps/middlewares/error.middleware.mjs";
 
 dotenv.config();
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/books", bookRoutes);
 
 // Error Middleware
 app.use(errorHandler);
