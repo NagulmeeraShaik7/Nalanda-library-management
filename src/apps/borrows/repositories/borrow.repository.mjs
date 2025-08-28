@@ -1,21 +1,60 @@
+/**
+ * @module BorrowRepository
+ * @description Repository class for handling database operations related to book borrowing.
+ */
+
 import Borrow from "../models/borrow.model.mjs";
 import Book from "../../books/models/book.model.mjs";
 import mongoose from "mongoose";
 
+/**
+ * @class BorrowRepository
+ * @description Manages database operations for borrow records, including creating, updating, querying, and aggregating borrow data.
+ */
 class BorrowRepository {
+  /**
+   * @method createBorrow
+   * @description Creates a new borrow record in the database.
+   * @param {Object} data - The borrow data including userId, bookId, and dueDate.
+   * @returns {Promise<Object>} The saved borrow document.
+   */
   async createBorrow(data) {
     const borrow = new Borrow(data);
     return borrow.save();
   }
 
+  /**
+   * @method findById
+   * @description Finds a borrow record by its ID, populating user and book details.
+   * @param {string} id - The ID of the borrow record to find.
+   * @returns {Promise<Object|null>} The borrow document with populated user (name, email) and book (title, author, ISBN) fields, or null if not found.
+   */
   async findById(id) {
     return Borrow.findById(id).populate("userId", "name email").populate("bookId", "title author ISBN");
   }
 
+  /**
+   * @method updateBorrow
+   * @description Updates a borrow record by ID with the provided data, populating user and book details.
+   * @param {string} id - The ID of the borrow record to update.
+   * @param {Object} update - The updated borrow data.
+   * @returns {Promise<Object|null>} The updated borrow document with populated user (name, email) and book (title, author, ISBN) fields, or null if not found.
+   */
   async updateBorrow(id, update) {
     return Borrow.findByIdAndUpdate(id, update, { new: true }).populate("userId", "name email").populate("bookId", "title author ISBN");
   }
 
+  /**
+   * @method listBorrows
+   * @description Retrieves a paginated list of borrow records based on query parameters.
+   * @param {Object} options - Query options for listing borrow records.
+   * @param {number} [options.skip=0] - Number of documents to skip for pagination.
+   * @param {number} [options.limit=10] - Maximum number of documents to return.
+   * @param {Object} [options.query={}] - Additional query filters for borrow records.
+   * @returns {Promise<Object>} An object containing the list of borrow records and the total count of matching documents.
+   * @property {Array<Object>} borrows - The list of borrow documents with populated user and book fields.
+   * @property {number} total - The total number of matching borrow records.
+   */
   async listBorrows({ skip = 0, limit = 10, query = {} }) {
     const borrows = await Borrow.find(query)
       .populate("userId", "name email")
@@ -28,7 +67,13 @@ class BorrowRepository {
     return { borrows, total };
   }
 
-  // Aggregation: most borrowed books
+  /**
+   * @method mostBorrowedBooks
+   * @description Aggregates and retrieves the most borrowed books, limited to a specified number.
+   * @param {Object} options - Options for the aggregation query.
+   * @param {number} [options.top=10] - Maximum number of books to return.
+   * @returns {Promise<Array<Object>>} A list of objects containing book details (bookId, title, author, ISBN) and their borrow count, sorted by borrow count in descending order.
+   */
   async mostBorrowedBooks({ top = 10 }) {
     const pipeline = [
       { $group: { _id: "$bookId", borrowCount: { $sum: 1 } } },
@@ -58,7 +103,13 @@ class BorrowRepository {
     return Borrow.aggregate(pipeline);
   }
 
-  // Aggregation: active members
+  /**
+   * @method activeMembers
+   * @description Aggregates and retrieves the most active members based on borrowing activity, limited to a specified number.
+   * @param {Object} options - Options for the aggregation query.
+   * @param {number} [options.top=10] - Maximum number of users to return.
+   * @returns {Promise<Array<Object>>} A list of objects containing user details (userId, name, email) and their borrow count, sorted by borrow count in descending order.
+   */
   async activeMembers({ top = 10 }) {
     const pipeline = [
       { $group: { _id: "$userId", borrowCount: { $sum: 1 } } },
@@ -87,7 +138,13 @@ class BorrowRepository {
     return Borrow.aggregate(pipeline);
   }
 
-  // Aggregation: book availability summary
+  /**
+   * @method bookAvailabilitySummary
+   * @description Aggregates and retrieves a summary of book availability, including total, borrowed, and available copies.
+   * @returns {Promise<Object>} An object containing per-book availability details and overall totals.
+   * @property {Array<Object>} perBook - List of book details with total, borrowed, and available copies.
+   * @property {Object} totals - Summary of total books, borrowed books, and available books across the system.
+   */
   async bookAvailabilitySummary() {
     // total books (sum of copies), borrowed copies (count of active borrows), available = total - borrowed
     // We'll use the books collection to sum copies and borrows collection to count borrowed copies per book
@@ -144,6 +201,6 @@ class BorrowRepository {
 
     return { perBook: booksSummary, totals };
   }
-} 
+}
 
 export default BorrowRepository;
