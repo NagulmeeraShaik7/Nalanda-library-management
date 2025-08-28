@@ -12,6 +12,11 @@ const swaggerDefinition = {
       url: "http://localhost:3000",
       description: "Development server",
     },
+    {
+      url: "https://nalanda-library-management-g6jn.onrender.com",
+      description: "Production server"
+    }
+    
   ],
   components: {
     securitySchemes: {

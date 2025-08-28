@@ -155,7 +155,11 @@ npm run test
 ## 📖 API Documentation
 
 Interactive Swagger docs:  
-[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
+[http://localhost:3000/api-docs](http://localhost:3000/api-docs) 
+
+Production Swaggerdocs:
+
+[https://nalanda-library-management-g6jn.onrender.com/api-docs]([https://nalanda-library-management-g6jn.onrender.com/api-docs)
 
 ---
 
@@ -174,7 +178,8 @@ Interactive Swagger docs:
   {
     "name": "John Doe",
     "email": "john@example.com",
-    "password": "yourpassword"
+    "password": "yourpassword",
+    "role": "Admin"
   }
   ```
 - Response: JWT token and user info
